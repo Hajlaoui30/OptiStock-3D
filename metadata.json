@@ -1,0 +1,6 @@
+{
+  "name": "OptiStock 3D — Gestion d'Entrepôt & Inventaire Visuel IA",
+  "description": "Application interactive en 3D de gestion de stocks, conception d'armoires et cases, reconnaissance visuelle IA des références produits et analytique du taux de rotation.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
