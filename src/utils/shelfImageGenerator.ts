@@ -14,28 +14,28 @@ export interface SampleShelfPhotoPreset {
 
 export const SAMPLE_SHELF_PRESETS: SampleShelfPhotoPreset[] = [
   {
-    id: 'preset-siemens-simatic',
-    title: 'Lot Siemens SIMATIC S7-1500 & ET 200SP (3 Cases)',
-    subtitle: 'Étiquettes MLFB 6ES7511-1AK02, 6ES7214-1AG40, 6ES7155-6AU01',
-    badge: 'Étagère Siemens · Automates & I/O',
+    id: 'preset-electronique',
+    title: 'Lot Électronique & Automatisme Général (3 Cases)',
+    subtitle: 'Étiquettes SKU-ELC-104, ELC-208, ELC-312',
+    badge: 'Rayonnage Électronique · Modules & Capteurs',
     itemsPreview: [
       {
-        ref: '6ES7511-1AK02',
-        name: 'Siemens CPU 1511-1 PN',
+        ref: 'SKU-ELC-104',
+        name: 'Module Automate Programmable',
         qty: 'QTY: 18 PCS',
         dim: '35x28x20 cm (Carton M)',
         boxColor: '#0f766e',
       },
       {
-        ref: '6ES7214-1AG40',
-        name: 'Siemens S7-1200 CPU 1214C',
+        ref: 'SKU-ELC-208',
+        name: 'Alimentation Industrielle 24V',
         qty: 'QTY: 26 PCS',
         dim: '28x20x15 cm (Bac S)',
         boxColor: '#1e3a8a',
       },
       {
-        ref: '6ES7155-6AU01',
-        name: 'Siemens Coupleur ET 200SP',
+        ref: 'SKU-ELC-312',
+        name: 'Coupleur Réseau Industriel',
         qty: 'QTY: 34 PCS',
         dim: '26x18x14 cm (Bac S)',
         boxColor: '#312e81',
@@ -43,28 +43,28 @@ export const SAMPLE_SHELF_PRESETS: SampleShelfPhotoPreset[] = [
     ],
   },
   {
-    id: 'preset-siemens-sinamics',
-    title: 'Lot Siemens SINAMICS Variateurs & HMI (3 Cases)',
-    subtitle: 'Étiquettes MLFB 6SL3210-1KE14, 6AV2123-2GB03, 6EP3334-7SB00',
-    badge: 'Étagère Siemens · Variateurs & IHM',
+    id: 'preset-mecanique',
+    title: 'Lot Mécanique & Transmission (3 Cases)',
+    subtitle: 'Étiquettes SKU-MEC-551, MEC-662, MEC-773',
+    badge: 'Rayonnage Mécanique · Variateurs & Moteurs',
     itemsPreview: [
       {
-        ref: '6SL3210-1KE14',
-        name: 'Siemens SINAMICS G120C',
+        ref: 'SKU-MEC-551',
+        name: 'Variateur de Vitesse Universel',
         qty: 'QTY: 11 PCS',
         dim: '48x36x28 cm (Caisse L)',
         boxColor: '#7c2d12',
       },
       {
-        ref: '6AV2123-2GB03',
-        name: 'Siemens HMI KTP700 7"',
+        ref: 'SKU-MEC-662',
+        name: 'Écran IHM Tactile 7 pouces',
         qty: 'QTY: 15 PCS',
         dim: '38x30x22 cm (Carton M)',
         boxColor: '#1e40af',
       },
       {
-        ref: '6EP3334-7SB00',
-        name: 'Siemens SITOP PSU6200',
+        ref: 'SKU-MEC-773',
+        name: 'Servomoteur Brushless 400W',
         qty: 'QTY: 22 PCS',
         dim: '34x26x20 cm (Carton M)',
         boxColor: '#065f46',
@@ -72,28 +72,28 @@ export const SAMPLE_SHELF_PRESETS: SampleShelfPhotoPreset[] = [
     ],
   },
   {
-    id: 'preset-siemens-sirius',
-    title: 'Lot Siemens SIRIUS Contacteurs & Disjoncteurs (3 Cases)',
-    subtitle: 'Étiquettes MLFB 3RT2026-1BB40, 3RV2021-4AA10, 5SY4216-7',
-    badge: 'Étagère Siemens · Départs Moteurs',
+    id: 'preset-quincaillerie',
+    title: 'Lot Quincaillerie & Fournitures Générales (3 Cases)',
+    subtitle: 'Étiquettes SKU-IND-012, IND-034, IND-056',
+    badge: 'Rayonnage Quincaillerie · Raccords & Fixations',
     itemsPreview: [
       {
-        ref: '3RT2026-1BB40',
-        name: 'Siemens Contacteur 25A',
+        ref: 'SKU-IND-012',
+        name: 'Relais de Puissance 25A',
         qty: 'QTY: 48 PCS',
         dim: '24x16x14 cm (Bac S)',
         boxColor: '#0f766e',
       },
       {
-        ref: '3RV2021-4AA10',
-        name: 'Siemens Disj. Moteur S0',
+        ref: 'SKU-IND-034',
+        name: 'Disjoncteur Modulaire Rail-DIN',
         qty: 'QTY: 36 PCS',
         dim: '24x16x14 cm (Bac S)',
         boxColor: '#4c1d95',
       },
       {
-        ref: '5SY4216-7',
-        name: 'Siemens Sentron 16A 2P',
+        ref: 'SKU-IND-056',
+        name: 'Coffret Borniers Industriels',
         qty: 'QTY: 30 PCS',
         dim: '32x24x18 cm (Carton M)',
         boxColor: '#854d0e',
@@ -103,8 +103,7 @@ export const SAMPLE_SHELF_PRESETS: SampleShelfPhotoPreset[] = [
 ];
 
 /**
- * Generates a realistic high-contrast industrial Siemens shelf & barcode label image as a base64 PNG
- * so Gemini Vision API can read the actual visual labels and the user can preview the exact shelf capture.
+ * Génère une étagère industrielle générale avec étiquettes codes-barres neutres
  */
 export function renderSampleShelfPhotoDataUrl(
   presetId: string,
@@ -120,45 +119,45 @@ export function renderSampleShelfPhotoDataUrl(
   const ctx = canvas.getContext('2d');
   if (!ctx) return '';
 
-  // Dark industrial rack backdrop
+  // Fond d'entrepôt sombre
   const grad = ctx.createLinearGradient(0, 0, 0, 540);
   grad.addColorStop(0, '#0f172a');
   grad.addColorStop(1, '#1e293b');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 960, 540);
 
-  // Vertical steel uprights (blue/slate)
+  // Montants verticaux en acier
   ctx.fillStyle = '#334155';
   ctx.fillRect(24, 0, 32, 540);
   ctx.fillRect(904, 0, 32, 540);
 
-  // Horizontal safety orange load beams
+  // Lisses horizontales orange de sécurité
   ctx.fillStyle = '#ea580c';
   ctx.fillRect(24, 44, 912, 34);
   ctx.fillRect(24, 446, 912, 42);
 
-  // Beam stencil markings
+  // Marquages neutres sur les lisses
   ctx.fillStyle = '#ffffff';
   ctx.font = 'bold 16px "JetBrains Mono", monospace';
   ctx.fillText(
-    `ARMOIRE SIEMENS: ${cabinetCode}   |   ÉTAGÈRE E${shelfIndex}   |   SCAN OPTIQUE MLFB IA`,
+    `RAYONNAGE: ${cabinetCode}   |   ÉTAGÈRE E${shelfIndex}   |   SCAN OPTIQUE DE STOCK`,
     72,
     67
   );
   ctx.fillText(
-    `SIEMENS LOGISTIQUE PIÈCES DE RECHANGE   ·   CERTIFIÉ ISO-9001`,
+    `GESTION D'ENTREPÔT GÉNÉRAL & LOGISTIQUE   ·   CERTIFIÉ ISO-9001`,
     72,
     473
   );
 
-  // Draw 3 compartment bins / crates sitting on the shelf
+  // Dessin des 3 casiers/bacs
   preset.itemsPreview.forEach((item, idx) => {
     const x = 74 + idx * 278;
     const y = 115;
     const w = 256;
     const h = 330;
 
-    // Bin divider line
+    // Séparateur métallique
     if (idx > 0) {
       ctx.strokeStyle = '#475569';
       ctx.lineWidth = 2;
@@ -168,15 +167,15 @@ export function renderSampleShelfPhotoDataUrl(
       ctx.stroke();
     }
 
-    // Crate body
+    // Bac / Carton
     ctx.fillStyle = item.boxColor;
     ctx.fillRect(x, y, w, h);
 
-    // Crate top rim highlight
+    // Rebord supérieur
     ctx.fillStyle = 'rgba(255,255,255,0.14)';
     ctx.fillRect(x, y, w, 18);
 
-    // White industrial shipping/inventory label sticker
+    // Étiquette blanche industrielle standard
     const lx = x + 18;
     const ly = y + 42;
     const lw = w - 36;
@@ -184,32 +183,32 @@ export function renderSampleShelfPhotoDataUrl(
     ctx.fillStyle = '#f8fafc';
     ctx.fillRect(lx, ly, lw, lh);
 
-    // Label header bar (Siemens Petrol Teal)
+    // En-tête de l'étiquette
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(lx, ly, lw, 32);
-    ctx.fillStyle = '#2dd4bf';
+    ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 13px "JetBrains Mono", monospace';
-    ctx.fillText(`SIEMENS · ${cabinetCode}-E${shelfIndex}-C${idx + 1}`, lx + 10, ly + 21);
+    ctx.fillText(`COLIS · ${cabinetCode}-E${shelfIndex}-C${idx + 1}`, lx + 10, ly + 21);
 
-    // SKU Reference in bold
+    // Référence SKU en gras
     ctx.fillStyle = '#0f172a';
     ctx.font = 'bold 19px "JetBrains Mono", monospace';
     ctx.fillText(item.ref, lx + 12, ly + 66);
 
-    // Product Name
+    // Désignation article
     ctx.fillStyle = '#334155';
-    ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '600 13px sans-serif';
     ctx.fillText(item.name, lx + 12, ly + 92);
 
-    // Quantity & Packaging Size
+    // Quantité et gabarit
     ctx.fillStyle = '#0f172a';
     ctx.font = 'bold 14px "JetBrains Mono", monospace';
     ctx.fillText(item.qty, lx + 12, ly + 122);
     ctx.fillStyle = '#475569';
     ctx.font = '12px "JetBrains Mono", monospace';
-    ctx.fillText(`EMB: ${item.dim}`, lx + 12, ly + 144);
+    ctx.fillText(`DIM: ${item.dim}`, lx + 12, ly + 144);
 
-    // Procedural barcode bars
+    // Code-barres universel
     const bx = lx + 14;
     const by = ly + 162;
     ctx.fillStyle = '#0f172a';
@@ -218,7 +217,7 @@ export function renderSampleShelfPhotoDataUrl(
       ctx.fillRect(bx + b * 5.6, by, barW, 42);
     }
 
-    // Green AI detection bounding box overlay
+    // Bounding box verte de détection IA
     ctx.strokeStyle = '#10b981';
     ctx.lineWidth = 2.5;
     ctx.strokeRect(lx - 4, ly - 4, lw + 8, lh + 8);

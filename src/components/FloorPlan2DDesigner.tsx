@@ -115,8 +115,8 @@ interface CabinetPresetTemplate {
 
 const CABINET_TEMPLATES: CabinetPresetTemplate[] = [
   {
-    id: 'tpl-siemens-asym-4',
-    label: 'Armoire Siemens Asymétrique (2/3/4/5 Cases)',
+    id: 'tpl-asym-4',
+    label: 'Armoire Modulaire Asymétrique (2/3/4/5 Cases)',
     subtitle: '3.70m × 0.95m · Cases Inégales E1(2), E2(3), E3(4), E4(5)',
     shelvesCount: 4,
     columnsCount: 4,
@@ -131,8 +131,8 @@ const CABINET_TEMPLATES: CabinetPresetTemplate[] = [
     },
   },
   {
-    id: 'tpl-siemens-drives-3',
-    label: 'Rack Variateurs SINAMICS & Moteurs',
+    id: 'tpl-drives-3',
+    label: 'Rack Variateurs & Moteurs Lourds',
     subtitle: '4.55m × 1.10m · E1 Large (2 coffres), E2 (3), E3 (4)',
     shelvesCount: 3,
     columnsCount: 5,
@@ -146,8 +146,8 @@ const CABINET_TEMPLATES: CabinetPresetTemplate[] = [
     },
   },
   {
-    id: 'tpl-siemens-sirius-4',
-    label: 'Armoire Contacteurs SIRIUS & Automates',
+    id: 'tpl-electric-4',
+    label: 'Armoire Appareillage Électrique & Fournitures',
     subtitle: '2.00m × 0.60m · Dimensions Libres Sur Mesure',
     shelvesCount: 4,
     columnsCount: 3,
@@ -200,7 +200,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
     DEFAULT_SIEMENS_EXCEL_CATALOG
   );
   const [importedFileName, setImportedFileName] = useState<string>(
-    'Catalogue_Siemens_MLFB_Par_Defaut.xlsx (12 réf.)'
+    'Catalogue_General_Articles.xlsx (12 réf.)'
   );
   const [autoAdaptCaseOnDrop, setAutoAdaptCaseOnDrop] = useState<boolean>(true);
 
@@ -414,8 +414,8 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
       name: `Armoire ${code} — ${tpl.label}`,
       zone:
         pt.z >= 0
-          ? 'Zone A · Accès Direct Siemens'
-          : 'Zone B · Réserve Siemens',
+          ? 'Zone A · Accès Direct '
+          : 'Zone B · Réserve ',
       position: pt,
       rotationY: 0,
       shelvesCount: tpl.shelvesCount,
@@ -505,7 +505,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
       }
 
       setStatusFeedback(
-        `Produit Siemens ${draggedSiemensRow.reference} (${draggedSiemensRow.lengthCm}×${draggedSiemensRow.widthCm}×${draggedSiemensRow.heightCm}cm) affecté à ${targetBinCode}.`
+        `Article ${draggedSiemensRow.reference} (${draggedSiemensRow.lengthCm}×${draggedSiemensRow.widthCm}×${draggedSiemensRow.heightCm}cm) affecté à ${targetBinCode}.`
       );
     }
     setDraggedBinId(null);
@@ -545,6 +545,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
       onPointerUp={() => {
         if (dividerDrag) {
           setDividerDrag(null);
+          
         }
       }}
     >
@@ -552,7 +553,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
       <div className="px-6 py-2.5 bg-[#0F172A] border-b border-slate-800 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <span className="text-sm font-bold text-slate-100 font-display whitespace-nowrap shrink-0">
-            Studio 2D Magasinier — Plan Salle, Cases Inégales &amp; Liste Excel Siemens
+            Studio 2D Magasinier — Plan Salle, Cases Inégales &amp; Gestion de Stock
           </span>
           <span className="text-slate-600 shrink-0">·</span>
           <span className="text-xs text-amber-400 font-mono truncate">
@@ -614,7 +615,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
             <div className="flex items-center justify-between gap-2">
               <h2 className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
                 <FileSpreadsheet className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>1. Liste Excel Produits Siemens</span>
+                <span>1. Liste des Articles & Colis</span>
               </h2>
               <span className="text-[11px] font-mono text-cyan-400 tabular-nums">
                 {siemensProducts.length} réf.
@@ -652,7 +653,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
                 className="px-2.5 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap"
               >
                 <Download className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Modèle Excel Siemens</span>
+                <span>Modèle Excel (XLSX)</span>
               </button>
             </div>
 
@@ -1408,7 +1409,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
                   </h4>
                   <p className="text-[11px] text-slate-400 mt-0.5">
                     Aucune dimension minimale : glissez les cloisons{' '}
-                    <strong className="text-amber-400">||</strong> entre les cases, saisissez directement la largeur/hauteur en cm ou déposez un produit Siemens.
+                    <strong className="text-amber-400">||</strong> entre les cases, saisissez directement la largeur/hauteur en cm ou déposez un article.
                   </p>
                 </div>
 
@@ -1604,7 +1605,7 @@ export const FloorPlan2DDesigner: React.FC<FloorPlan2DDesignerProps> = ({
                                         {!fitsProductDimensionally && (
                                           <button
                                             type="button"
-                                            title="Adapter automatiquement la largeur de cette case au produit Siemens"
+                                            title="Adapter automatiquement la largeur de cette case au produit"
                                             onClick={(e) => {
                                               e.stopPropagation();
                                               onSetBinWidthCm(

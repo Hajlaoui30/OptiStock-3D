@@ -16,7 +16,7 @@ function normalizeHeaderKey(key: string): string {
 
 function parseCategory(raw: string): ProductCategory {
   const clean = (raw || '').toLowerCase();
-  if (clean.includes('mec') || clean.includes('mot') || clean.includes('simotics')) {
+  if (clean.includes('mec') || clean.includes('mot')) {
     return 'Mécanique';
   }
   if (clean.includes('hyd')) return 'Hydraulique';
@@ -26,7 +26,7 @@ function parseCategory(raw: string): ProductCategory {
 }
 
 /**
- * Parses an ArrayBuffer from an uploaded .xlsx, .xls, or .csv file into SiemensExcelProductRow[].
+ * Parses an ArrayBuffer from an uploaded .xlsx, .xls, or .csv file into generic product rows.
  */
 export function parseSiemensExcelBuffer(buffer: ArrayBuffer): SiemensExcelProductRow[] {
   const workbook = XLSX.read(buffer, { type: 'array' });
@@ -48,11 +48,11 @@ export function parseSiemensExcelBuffer(buffer: ArrayBuffer): SiemensExcelProduc
 
     const reference = String(
       normMap['reference'] ||
-        normMap['mlfb'] ||
         normMap['ref'] ||
-        normMap['codesiemens'] ||
+        normMap['code'] ||
         normMap['article'] ||
         normMap['sku'] ||
+        normMap['mlfb'] ||
         ''
     ).trim();
 
@@ -134,9 +134,9 @@ export function parseSiemensExcelBuffer(buffer: ArrayBuffer): SiemensExcelProduc
     const packagingType = inferPackagingTypeFromDimensions(lengthCm, widthCm, heightCm);
 
     parsed.push({
-      id: `siemens-xlsx-${Date.now().toString(36)}-${idx}`,
-      reference: (reference || `6ES7-AUTO-${idx + 1}`).toUpperCase(),
-      name: name.startsWith('Siemens') ? name : `Siemens ${name}`,
+      id: `prod-xlsx-${Date.now().toString(36)}-${idx}`,
+      reference: (reference || `REF-${idx + 1}`).toUpperCase(),
+      name: name,
       category,
       packagingType,
       lengthCm: Math.round(lengthCm),
@@ -153,14 +153,14 @@ export function parseSiemensExcelBuffer(buffer: ArrayBuffer): SiemensExcelProduc
 }
 
 /**
- * Generates and downloads a real .xlsx Excel file containing the Siemens product list with dimensions.
+ * Generates and downloads a real .xlsx Excel file containing the product list with dimensions.
  */
 export function downloadSiemensExcelTemplate(
   rows: SiemensExcelProductRow[] = DEFAULT_SIEMENS_EXCEL_CATALOG
 ): void {
   const sheetData = rows.map((r) => ({
-    Reference_MLFB: r.reference,
-    Designation_Siemens: r.name,
+    Reference: r.reference,
+    Designation: r.name,
     Famille: r.category,
     Type_Emballage: r.packagingType,
     Longueur_cm: r.lengthCm,
@@ -173,6 +173,6 @@ export function downloadSiemensExcelTemplate(
 
   const worksheet = XLSX.utils.json_to_sheet(sheetData);
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Produits_Siemens');
-  XLSX.writeFile(workbook, 'Liste_Produits_Siemens_Dimensions.xlsx');
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Produits');
+  XLSX.writeFile(workbook, 'Liste_Produits_Dimensions.xlsx');
 }

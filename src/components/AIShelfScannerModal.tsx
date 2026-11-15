@@ -20,7 +20,7 @@ import {
   SAMPLE_SHELF_PRESETS,
   renderSampleShelfPhotoDataUrl,
 } from '../utils/shelfImageGenerator';
-
+import { analyzeShelfWithGemini } from '../utils/geminiService';
 interface AIShelfScannerModalProps {
   cabinets: Cabinet[];
   initialCabinetId: string | null;
@@ -98,50 +98,80 @@ export const AIShelfScannerModal: React.FC<AIShelfScannerModalProps> = ({
     reader.readAsDataURL(file);
   };
 
-  const handleRunAIScan = async () => {
+const handleRunAIScan = async () => {
     if (!selectedCabinet || !imagePreviewUrl) return;
     setIsScanning(true);
     setScanError(null);
     setAssociationSuccessMessage(null);
 
     try {
-      const response = await fetch('/api/ai/scan-shelf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageBase64: imagePreviewUrl,
-          mimeType: imageMimeType,
-          cabinetCode: selectedCabinet.code,
-          shelfLevel: targetShelfIndex,
-          totalColumns: selectedCabinet.columnsCount,
-          samplePresetId:
-            selectedPresetId === 'custom-upload'
-              ? 'preset-hydraulique'
-              : selectedPresetId,
-          customNote,
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok || data.error) {
-        throw new Error(data.error || 'Échec de la reconnaissance visuelle IA.');
-      }
+      // Appel direct à l'API Gemini pour analyser l'image de façon générale
+      const detectedItems = await analyzeShelfWithGemini(
+        imagePreviewUrl,
+        imageMimeType
+      );
 
       setScanResult({
-        summary: data.summary,
-        confidenceScore: data.confidenceScore || 97.5,
-        detectedItems: data.detectedItems || [],
+        summary: `Reconnaissance IA réussie : ${detectedItems.length} articles et colis détectés sur l'étagère.`,
+        confidenceScore: 96.5,
+        detectedItems: detectedItems,
       });
     } catch (err) {
       setScanError(
         err instanceof Error
           ? err.message
-          : 'Erreur lors de la connexion au moteur de vision IA.'
+          : 'Erreur lors de la connexion au moteur de vision IA Gemini.'
       );
     } finally {
       setIsScanning(false);
     }
   };
+
+
+  // const handleRunAIScan = async () => {
+  //   if (!selectedCabinet || !imagePreviewUrl) return;
+  //   setIsScanning(true);
+  //   setScanError(null);
+  //   setAssociationSuccessMessage(null);
+
+  //   try {
+  //     const response = await fetch('/api/ai/scan-shelf', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         imageBase64: imagePreviewUrl,
+  //         mimeType: imageMimeType,
+  //         cabinetCode: selectedCabinet.code,
+  //         shelfLevel: targetShelfIndex,
+  //         totalColumns: selectedCabinet.columnsCount,
+  //         samplePresetId:
+  //           selectedPresetId === 'custom-upload'
+  //             ? 'preset-hydraulique'
+  //             : selectedPresetId,
+  //         customNote,
+  //       }),
+  //     });
+
+  //     const data = await response.json();
+  //     if (!response.ok || data.error) {
+  //       throw new Error(data.error || 'Échec de la reconnaissance visuelle IA.');
+  //     }
+
+  //     setScanResult({
+  //       summary: data.summary,
+  //       confidenceScore: data.confidenceScore || 97.5,
+  //       detectedItems: data.detectedItems || [],
+  //     });
+  //   } catch (err) {
+  //     setScanError(
+  //       err instanceof Error
+  //         ? err.message
+  //         : 'Erreur lors de la connexion au moteur de vision IA.'
+  //     );
+  //   } finally {
+  //     setIsScanning(false);
+  //   }
+  // };
 
   const handleUpdateScannedItem = (
     idx: number,
@@ -156,6 +186,8 @@ export const AIShelfScannerModal: React.FC<AIShelfScannerModalProps> = ({
       detectedItems: nextItems,
     });
   };
+
+  
 
   const handleConfirmAssociation = () => {
     if (!selectedCabinet || !scanResult) return;

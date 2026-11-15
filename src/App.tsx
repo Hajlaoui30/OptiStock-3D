@@ -11,6 +11,9 @@ import {
   X,
   Grid,
 } from 'lucide-react';
+import { IndustrialAppTour } from './components/IndustrialAppTour';
+//import { InteractiveAppTour } from './components/InteractiveAppTour';
+import { HelpCircle } from 'lucide-react';
 import {
   Cabinet,
   ColorMode3D,
@@ -58,10 +61,20 @@ type ActiveOverlay =
   | 'analytics'
   | 'optimize';
 
-const STORAGE_KEY = 'optistock_3d_siemens_v2';
+//const STORAGE_KEY = 'optistock_3d_v2';
+const STORAGE_KEY = 'optistock_3d_nouveau_catalogue_2026';
 const ROOM_STORAGE_KEY = 'optistock_3d_room_v3';
 
 export default function App() {
+  // Ouvre le guide automatiquement si l'utilisateur ne l'a pas encore vu
+  const [showTour, setShowTour] = useState<boolean>(() => {
+    return localStorage.getItem('optistock_tour_done') !== 'true';
+  });
+
+  const handleCloseTour = () => {
+    setShowTour(false);
+    localStorage.setItem('optistock_tour_done', 'true');
+  };
   const [cabinets, setCabinets] = useState<Cabinet[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -76,6 +89,10 @@ export default function App() {
     }
     return createInitialWarehouseCabinets();
   });
+
+   useEffect(() => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cabinets));
+   }, [cabinets]);
 
   const [roomDimensions, setRoomDimensions] = useState<RoomDimensions>(() => {
     try {
@@ -403,7 +420,7 @@ export default function App() {
                 : ''
             }`}
           >
-            Plan 2D &amp; Excel Siemens
+            Plan 2D &amp; Catalogue Excel 
           </a>
           <a
             href="#entrepot-3d"
@@ -446,7 +463,7 @@ export default function App() {
                 : ''
             }`}
           >
-            Catalogue Siemens
+            Catalogue
           </a>
           <a
             href="#analytique"
@@ -475,6 +492,15 @@ export default function App() {
             <span>Configurer en 2D (Armoires &amp; Cases)</span>
           </button>
         </div>
+        <button
+  type="button"
+  onClick={() => setShowTour(true)}
+  className="px-2.5 py-1.5 text-xs font-mono text-slate-300 hover:text-amber-400 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+  title="Démarrer le guide interactif"
+>
+  <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+  <span className="hidden sm:inline">Guide</span>
+</button>
       </header>
 
       {/* 2. Full-Viewport 3D Three.js Scene */}
@@ -524,11 +550,11 @@ export default function App() {
               <div className="text-xs text-slate-300 space-y-1.5 border-t border-slate-800 pt-2.5">
                 <div className="flex items-center justify-between gap-2 font-mono">
                   <span className="text-slate-400 whitespace-nowrap">
-                    Réf. Siemens (MLFB) :
+                       Référence / Code SKU :
                   </span>
-                  <span className="font-bold text-amber-300 whitespace-nowrap">
-                    {selectedBin.product.reference}
-                  </span>
+                   <span className="font-bold text-amber-300 whitespace-nowrap">
+                       {selectedBin.product.reference}
+                   </span>
                 </div>
                 <div className="flex items-center justify-between gap-2 font-mono tabular-nums">
                   <span className="text-slate-400 whitespace-nowrap">
@@ -555,8 +581,8 @@ export default function App() {
               </div>
             ) : (
               <p className="text-xs text-slate-400 border-t border-slate-800 pt-2.5">
-                Case de largeur {selectedBinGeometry?.widthCm ?? 85} cm sur
-                l&apos;étagère E{selectedBin.shelfIndex}. Glissez un produit Siemens en 2D ou scannez l&apos;étagère.
+                 Case de largeur {selectedBinGeometry?.widthCm ?? 85} cm sur
+                  l&apos;étagère E{selectedBin.shelfIndex}. Glissez un article en 2D ou scannez l&apos;étagère.
               </p>
             )}
 
@@ -715,6 +741,8 @@ export default function App() {
           onSwitch3DColorMode={(mode) => setColorMode(mode)}
         />
       )}
+      {/* Guide Interactif Embarqué */}
+      <IndustrialAppTour isOpen={showTour} onClose={handleCloseTour} />
     </div>
   );
 }

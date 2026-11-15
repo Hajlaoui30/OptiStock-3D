@@ -26,7 +26,7 @@ import {
   autoOrganizeSiemensProductsInCabinet,
 } from './warehouseLogic';
 
-test('initial warehouse creates 5 Siemens cabinets with unequal shelf cases and packaging sizes', () => {
+test('initial warehouse creates 5 cabinets with unequal shelf cases and packaging sizes', () => {
   const cabinets = createInitialWarehouseCabinets();
   assert.equal(cabinets.length, 5);
   const analytics = computeWarehouseAnalytics(cabinets);
@@ -51,7 +51,7 @@ test('createCabinet, updateCabinetStructure, and deleteCabinet manage shelves an
   const initial = createInitialWarehouseCabinets();
   const newCab = createCabinet({
     code: 'arm-d1',
-    name: 'Armoire D1 — Siemens Pneumatique',
+    name: 'Armoire D1 — Outillage & Pneumatique',
     zone: 'Zone D',
     position: { x: 0, z: 0 },
     shelvesCount: 3,
@@ -90,7 +90,7 @@ test('addBinToShelf, removeBinFromShelf, and resizeShelfBinDivider manipulate un
   assert.equal(getShelfBinsWithGeometry(cabinets[0], 1).length, 2);
 });
 
-test('autoOrganizeSiemensProductsInCabinet places Siemens Excel products by dimensions and turnover', () => {
+test('autoOrganizeSiemensProductsInCabinet places products by dimensions and turnover', () => {
   const cabinets = createInitialWarehouseCabinets();
   const targetCab = cabinets[1]; // ARM-A2
   const { updatedCabinets, placedCount } = autoOrganizeSiemensProductsInCabinet(
@@ -102,7 +102,7 @@ test('autoOrganizeSiemensProductsInCabinet places Siemens Excel products by dime
   assert.equal(placedCount, 8);
   const updatedA2 = updatedCabinets.find((c) => c.id === targetCab.id)!;
   const shelf1Bins = updatedA2.bins.filter((b) => b.shelfIndex === 1 && b.product !== null);
-  assert.ok(shelf1Bins.length >= 1, 'Heavy/large Siemens drives placed on bottom shelf E1');
+  assert.ok(shelf1Bins.length >= 1, 'Heavy/large products placed on bottom shelf E1');
 });
 
 test('upsertBinProduct, adjustBinQuantity, and removeBinProduct modify bin contents', () => {
@@ -110,8 +110,8 @@ test('upsertBinProduct, adjustBinQuantity, and removeBinProduct modify bin conte
   const emptyBin = cabinets[0].bins.find((b) => b.product === null)!;
 
   cabinets = upsertBinProduct(cabinets, emptyBin.id, {
-    reference: '6ES7-999',
-    name: 'Siemens Module Test PROFINET',
+    reference: 'SKU-MOD-999',
+    name: 'Module Test Réseau Ethernet',
     category: 'Électronique',
     quantity: 10,
     minThreshold: 3,
@@ -123,7 +123,7 @@ test('upsertBinProduct, adjustBinQuantity, and removeBinProduct modify bin conte
   });
 
   const updatedBin = cabinets[0].bins.find((b) => b.id === emptyBin.id)!;
-  assert.equal(updatedBin.product?.reference, '6ES7-999');
+  assert.equal(updatedBin.product?.reference, 'SKU-MOD-999');
   assert.equal(updatedBin.product?.quantity, 10);
 
   cabinets = adjustBinQuantity(cabinets, emptyBin.id, 5);
@@ -143,8 +143,8 @@ test('associateScannedItemsToCabinetShelf automatically populates target shelf b
     3,
     [
       {
-        reference: '6ES7518-4AP00-0AB0',
-        name: 'Siemens CPU 1518-4 PN/DP',
+        reference: 'SKU-CPU-518',
+        name: 'Unité Centrale Haute Performance',
         category: 'Électronique',
         quantity: 22,
         packagingType: 'Bac Europe S',
@@ -155,8 +155,8 @@ test('associateScannedItemsToCabinetShelf automatically populates target shelf b
         targetColIndex: 1,
       },
       {
-        reference: '6SL3210-1KE14',
-        name: 'Siemens SINAMICS G120C',
+        reference: 'SKU-DRV-150',
+        name: 'Variateur Industriel 1.5kW',
         category: 'Électronique',
         quantity: 8,
         packagingType: 'Caisse Renforcée L',
@@ -173,7 +173,7 @@ test('associateScannedItemsToCabinetShelf automatically populates target shelf b
   assert.ok(assignedBinCodes.includes('ARM-A1-E3-C1'));
   assert.ok(assignedBinCodes.includes('ARM-A1-E3-C2'));
 
-  const results = searchWarehouseBins(updatedCabinets, '6ES7518-4AP00-0AB0');
+  const results = searchWarehouseBins(updatedCabinets, 'SKU-CPU-518');
   assert.equal(results.length, 1);
   assert.equal(results[0].product?.scannedFromImage, true);
 });
@@ -224,9 +224,10 @@ test('2D Floor Plan rectangle creation, room clamping, and collision detection w
   const collisionCode = checkCabinetCollision(collidingCab, cabinets);
   assert.equal(collisionCode, 'ARM-A1');
 
-  const bin1 = cabinets[0].bins[0]; // 6SL3210-1KE21-7UF1
+  const bin1 = cabinets[0].bins[0];
+  const initialRef = bin1.product?.reference || 'SKU-DRV-750';
   const binEmpty = cabinets[0].bins.find((b) => b.product === null)!;
   const swapped = moveOrSwapBins(cabinets, bin1.id, binEmpty.id);
   const updatedEmpty = swapped[0].bins.find((b) => b.id === binEmpty.id)!;
-  assert.equal(updatedEmpty.product?.reference, '6SL3210-1KE21-7UF1');
+  assert.equal(updatedEmpty.product?.reference, initialRef);
 });

@@ -44,7 +44,7 @@ Extrais toutes les références de produits visibles (codes SKU, étiquettes, ca
 Si l'image contient des étiquettes ou boîtes industrielles, lis scrupuleusement chaque code de référence (ex: REF-xxx, SKU-xxx, MEC-xxx, ELEC-xxx, HYD-xxx).`;
 
         const response = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
+           model: 'gemini-2.0-flash',
           contents: {
             parts: [
               {
